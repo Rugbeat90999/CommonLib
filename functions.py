@@ -1,4 +1,4 @@
-from classes import Path
+from CommonLib.classes import Path
 import random
 import json
 import os
