@@ -152,6 +152,17 @@ class UUID:
 
   def __str__(self) -> str:
     return self.__uuid
+  
+  # def __format__(self, format_spec:str="string"):
+  #   '''
+  #   Options:\n
+  #   \"string\": returns a string of the UUID\n
+  #   \"alphabetic\": returns a string of the UUID in alphabetic form\n
+  #   '''
+  #   if format_spec == "string":
+  #     return self.__uuid
+  #   if format_spec == "alphabetic":
+  #     return self.alphabetic_version
 
   def __eq__(self, other:"UUID") -> bool:
     return self.__uuid == other.uuid

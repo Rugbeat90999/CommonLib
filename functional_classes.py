@@ -5,8 +5,12 @@ class staticproperty:
     self.func = func
 
   def __get__(self, instance, owner):
-    return self.func(owner)
-
+    try:
+      return self.func()
+    except TypeError as e:
+      if "missing" in str(e):
+        if "required positional argument" in str(e):
+          raise TypeError("Static property cannont have inputs")
 
 class staticstr(type):
   def __str__(cls):
