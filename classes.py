@@ -102,7 +102,7 @@ class UUID:
     return self.__generated
 
   @property
-  def uuid(self) -> str:
+  def uuid(self) -> "UUID":
     return self.__uuid
   
   @property
@@ -165,9 +165,13 @@ class UUID:
   #     return self.alphabetic_version
 
   def __eq__(self, other:"UUID") -> bool:
+    if not isinstance(other, UUID):
+      raise ValueError(f"UUID can only be compaired to UUID not {type(other)}")
     return self.__uuid == other.uuid
   
   def __ne__(self, other:"UUID") -> bool:
+    if not isinstance(other, UUID):
+      raise ValueError(f"UUID can only be compaired to UUID not {type(other)}")
     return self.__uuid != other.uuid
   
 
