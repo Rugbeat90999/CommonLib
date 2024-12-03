@@ -246,21 +246,51 @@ class Path:
     self.__is_file_valid = os.path.isfile(path)
     if not self.__is_directory_valid and not self.__is_file_valid:
       raise ValueError(f"Invalid path: {path}")
-    if self.__is_file_valid:
-      self.file_name = os.path.basename(path)
-      self.file_extension = os.path.splitext(path)[1]
-    if self.__is_directory_valid and not self.__is_file_valid:
-      self.directory = os.path.dirname(path)
-      self.files_in_directory = os.listdir(path)
 
 
   @property
   def is_file(self) -> bool:
     return self.__is_file_valid
+
   @property
   def is_directory(self) -> bool:
     return self.__is_directory_valid
 
+  @property
+  def file_name(self) -> str:
+    if self.is_directory:
+      raise FileNotFoundError("this is a directory not a file")
+    return os.path.basename(self.path)
+  
+  @property
+  def base_file_name(self) -> str:
+    if self.is_directory:
+      raise FileNotFoundError("this is a directory not a file")
+    base = os.path.basename(self.path).split(".")
+    base.pop()
+    return ".".join(base)
+
+  @property
+  def file_extension(self) -> str:
+    if self.is_directory:
+      raise FileNotFoundError("this is a directory not a file")
+    return os.path.splitext(self.path)[1]
+
+  @property
+  def files_in_directory(self) -> list["Path"]:
+    if self.is_file:
+      raise NotADirectoryError("this is a file not a directory")
+    paths = []
+    for name in os.listdir(self.path):
+      paths.append(Path(f"{self.path}/{name}"))
+    return paths
+  
+  @property
+  def directory(self) -> str:
+    if self.is_file:
+      raise NotADirectoryError("this is a file not a directory")
+    return os.path.dirname(self.path)
+  
 
   def __str__(self) -> str:
     if self.__is_file_valid:
@@ -272,4 +302,83 @@ file_extension:{self.file_extension}'''
       return f'''This path is a directory
 path:{self.path}
 directory:{self.directory}
-files_in_directroy:{self.files_in_directory}'''
+files_in_directroy:{os.listdir(self.path)}'''
+
+
+
+
+class OutputColors:
+  def __init__(self, font: str | int = "default", color: str | int = "default", background: str | int = "default"):
+    match font:
+      case "default" | 0:
+        self.font = 0
+      case "bold" | 1:
+        self.font = 1
+      case "faded" | 2:
+        self.font = 2
+      case "italic" | 3:
+        self.font = 3
+      case "underline" | 4:
+        self.font = 4
+      case "blink" | 5:
+        self.font = 5
+      case "negative" | 6:
+        self.font = 6
+      case "reverse" | 7:
+        self.font = 7
+      case "invisible" | 8:
+        self.font = 8
+      case "strike" | "strike_through" | 9:
+        self.font = 9
+      case _:
+        raise ValueError(f"Invalid font: {font}")
+    
+    match color:
+      case "dark_gray" | "dark" | "dark_grey" | 0:
+        self.color = 30
+      case "red" | 1:
+        self.color = 31
+      case "green" | 2:
+        self.color = 32
+      case "yellow" | 3:
+        self.color = 33
+      case "blue" | 4:
+        self.color = 34
+      case "magenta" | 5:
+        self.color = 35
+      case "cyan" | 6:
+        self.color = 36
+      case "white" | 7:
+        self.color = 37
+      case "default" | 9 | 8:
+        self.color = 39
+      case _:
+        raise ValueError(f"Invalid color: {color}")
+    
+    match background:
+      case "black" | 0:
+        self.background = 40
+      case "red" | 1:
+        self.background = 41
+      case "green" | 2:
+        self.background = 42
+      case "yellow" | 3:
+        self.background = 43
+      case "blue" | 4:
+        self.background = 44
+      case "magenta" | 5:
+        self.background = 45
+      case "cyan" | 6:
+        self.background = 46
+      case "white" | 7:
+        self.background = 47
+      case "default" | 9 | 8:
+        self.background = 49
+      case _:
+        raise ValueError(f"Invalid background: {background}")
+  
+  def __str__(self):
+    return f"\033[{self.font};{self.color};{self.background}m"
+  
+  def __format__(self, format_spec):
+    return self.__str__()
