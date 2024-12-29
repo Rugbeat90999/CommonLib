@@ -96,3 +96,9 @@ def py_image(path:str):
       raise FileNotFoundError("Requires a path to a file, but no file was found")
     return pygame.image.load(path).convert_alpha()
   return do(path)
+
+
+def log(message: str):
+  with open('log.txt', 'a') as file:
+    file.write(f"{message}\n")
+  print(message)
