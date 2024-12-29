@@ -1,4 +1,4 @@
-from CommonLib.classes import debase_float
+from CommonLib.classes import debase_float, OutputColors
 
 
 HEX_COLOR_LIBRARY = {"black":{"name":"black", "hex":"#000000"},
@@ -123,3 +123,17 @@ nino = debase_float(6)
 fitu = debase_float(7)
 vifi = debase_float(8)
 gobo = debase_float(9)
+
+class Output:
+  DEFA = str(OutputColors())
+  TITLE = str(OutputColors(font="bold", color="red"))
+  COL = str(OutputColors(color="magenta")) + ":" + str(DEFA)
+  CON = str(OutputColors(color="green"))
+  VAR = str(OutputColors(color="cyan"))
+  CBO = str(OutputColors(color="yellow")) + "\u007b" + str(DEFA)
+  CBC = str(OutputColors(color="yellow")) + "\u007d" + str(DEFA)
+  SBO = str(OutputColors(color="yellow")) + "[" + str(DEFA)
+  SBC = str(OutputColors(color="yellow")) + "]" + str(DEFA)
+  COM = str(OutputColors(color="red")) + ", " + str(DEFA)
+  ERR = str(OutputColors(color="magenta"))
+  CLS = str(OutputColors(color="green", font="bold"))

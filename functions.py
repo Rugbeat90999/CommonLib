@@ -1,4 +1,4 @@
-from CommonLib.classes import Path
+from CommonLib.classes import Path, OutputColors
 import random
 import json
 import os
@@ -102,3 +102,7 @@ def log(message: str):
   with open('log.txt', 'a') as file:
     file.write(f"{message}\n")
   print(message)
+
+
+def debug(message:str):
+  print(f"DEBUG: \n{message}")

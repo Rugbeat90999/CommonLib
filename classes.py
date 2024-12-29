@@ -292,6 +292,42 @@ class Path:
     return os.path.dirname(self.path)
   
 
+  @property
+  def file_name(self) -> str:
+    if self.is_directory:
+      raise FileNotFoundError("this is a directory not a file")
+    return os.path.basename(self.path)
+  
+  @property
+  def base_file_name(self) -> str:
+    if self.is_directory:
+      raise FileNotFoundError("this is a directory not a file")
+    base = os.path.basename(self.path).split(".")
+    base.pop()
+    return ".".join(base)
+
+  @property
+  def file_extension(self) -> str:
+    if self.is_directory:
+      raise FileNotFoundError("this is a directory not a file")
+    return os.path.splitext(self.path)[1]
+
+  @property
+  def files_in_directory(self) -> list["Path"]:
+    if self.is_file:
+      raise NotADirectoryError("this is a file not a directory")
+    paths = []
+    for name in os.listdir(self.path):
+      paths.append(Path(f"{self.path}/{name}"))
+    return paths
+  
+  @property
+  def directory(self) -> str:
+    if self.is_file:
+      raise NotADirectoryError("this is a file not a directory")
+    return os.path.dirname(self.path)
+  
+
   def __str__(self) -> str:
     if self.__is_file_valid:
       return f'''This path is a file
