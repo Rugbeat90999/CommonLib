@@ -490,4 +490,44 @@ class debase_float:
     return debase_float(self.__num // float(other))
 
 
+class ConsoleProgressBar:
+  def __init__(self, max: int):
+    self.max = max
+    self.msg = ""
+    self.current = 0
 
+  @property
+  def percent(self):
+    return round(self.current/self.max * 100, 2)
+
+
+  def add(self, amount: int = 1):
+    self.current += amount
+    if self.max < self.current:
+      raise ValueError("adding more value to current than max will allow")
+    return self
+
+
+  def set_progress_msg(self, msg: str):
+    self.msg = msg
+
+
+  def show(self, persist:bool = False):
+    out = f"{OutputColors(color="red")}["
+    put = f"] {self.percent}%{OutputColors()}"
+
+    o = ""
+    for i in range(20):
+      i += 1
+      if i <= self.percent/5:
+        o += f"{OutputColors(color="green")}-"
+      else:
+        o += f"{OutputColors(color="red")}-"
+    
+    output = out + o + put
+
+    if self.percent == 100 or persist:
+      print(f"{OutputColors(color="green")}{self.msg}: [--------------------] 100.00%{OutputColors()}")
+    else:
+      # print(output)
+      print(f"{OutputColors(color="red")}{self.msg}: {output}", end="\r")
