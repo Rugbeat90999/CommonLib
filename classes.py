@@ -24,6 +24,10 @@ class UUIDError(BaseException):
 class NotUniqueUUIDError(UUIDError):
   def __init__(self, message):
     print(f"NotUniqueUUIDError: {message}")
+
+class InvalidPathError(BaseException):
+  def __init__(self, message):
+    print(f"InvalidPathError: {message}")
   
 
 
@@ -240,12 +244,22 @@ class Base16:
 
 
 class Path:
+  '''
+  A class to ensure that any path that is used is valid and what you wanted.
+  '''
   def __init__(self, path:str):
     self.path = path
     self.__is_directory_valid = os.path.isdir(path)
     self.__is_file_valid = os.path.isfile(path)
     if not self.__is_directory_valid and not self.__is_file_valid:
-      raise ValueError(f"Invalid path: {path}")
+      raise InvalidPathError(f"{path}")
+  
+
+  def __str__(self):
+    return f"{self.path}"
+
+  def __repr__(self):
+    return f"Path({self.path})"
 
 
   @property
@@ -255,42 +269,6 @@ class Path:
   @property
   def is_directory(self) -> bool:
     return self.__is_directory_valid
-
-  @property
-  def file_name(self) -> str:
-    if self.is_directory:
-      raise FileNotFoundError("this is a directory not a file")
-    return os.path.basename(self.path)
-  
-  @property
-  def base_file_name(self) -> str:
-    if self.is_directory:
-      raise FileNotFoundError("this is a directory not a file")
-    base = os.path.basename(self.path).split(".")
-    base.pop()
-    return ".".join(base)
-
-  @property
-  def file_extension(self) -> str:
-    if self.is_directory:
-      raise FileNotFoundError("this is a directory not a file")
-    return os.path.splitext(self.path)[1]
-
-  @property
-  def files_in_directory(self) -> list["Path"]:
-    if self.is_file:
-      raise NotADirectoryError("this is a file not a directory")
-    paths = []
-    for name in os.listdir(self.path):
-      paths.append(Path(f"{self.path}/{name}"))
-    return paths
-  
-  @property
-  def directory(self) -> str:
-    if self.is_file:
-      raise NotADirectoryError("this is a file not a directory")
-    return os.path.dirname(self.path)
-  
 
   @property
   def file_name(self) -> str:
