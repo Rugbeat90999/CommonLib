@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
   name='CommonLib',
   version='1.0.0',
-  packages=find_packages(include=("CommonLib")),
+  packages=find_packages(),
   install_requires=[],  # add dependencies like ['requests']
   author='Rugbeat90999',
   author_email='rugbeat909@gmail.com',
